@@ -1,0 +1,34 @@
+#!/bin/bash
+#Author: Jason Honea
+#Script that traverse a given location and it's subdirectories for video *.iso files and will encode them to *.mkv.
+#Requires: HandBrakeCLI
+
+printUsage(){
+	printf "Deiso is a simple script that will traverse a given location and it's subdirectories for video *.iso files and will encode them to *.mkv.
+	Example useage: 
+	$ ./deiso <directory path>\n"
+}
+
+LOCATION=$1
+if [ $# -gt 0 ]
+then
+	if test -d ${LOCATION}
+	then
+		for DIRECTORY in ${LOCATION}* ${LOCATION}*/
+		do	
+			for FILE in ${DIRECTORY}*
+				do
+				if test -e ${FILE} && [[ ${FILE} == *.iso ]]
+				then
+					OUTPUT=${FILE%.iso}.mkv
+					eval HandBrakeCLI -i ${FILE} -o ${OUTPUT} -f av_mkv -e x265 -E copy --min-duration 0 -2 -q 22 --main-feature --all-audio --all-subtitles
+					sleep 3
+				fi
+			done
+		done
+	else
+		echo "Path is not a directory!"
+	fi
+else
+	printUsage
+fi
