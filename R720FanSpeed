@@ -1,0 +1,29 @@
+IDRACIP=<iDrac IP>
+IDRACUSER=<User>
+IDRACPWD=<Password>
+#LOWTHRESHHOLD="55"
+MIDTHRESHOLD="65"
+HIGHTHRESHOLD="80"
+IFS=' '
+ipmitool -I lanplus -H $IDRACIP -U $IDRACUSER -P $IDRACPWD raw 0x30 0x30 0x01 0x00 #Enables static fan control
+temps=($(ipmitool -I lanplus -H $IDRACIP -U $IDRACUSER -P $IDRACPWD sdr type temperature | grep ^Temp))
+tempOne=${temps[8]}
+tempTwo=${temps[18]}
+avgTemp=$((($tempOne+$tempTwo)/2))
+echo "Ambient Temperature: $avgTemp"
+if [[ $avgTemp -le $MIDTHRESHOLD ]]
+  then
+    echo "Setting fan speed to low."
+    #set fan speed to 10%
+    ipmitool -I lanplus -H $IDRACIP -U $IDRACUSER -P $IDRACPWD raw 0x30 0x30 0x02 0xff 0x0a
+elif [[ $avgTemp > $MIDTHRESHOLD && $avgTemp -le $HIGHTHRESHOLD ]]
+  then
+    echo "Setting fan speed to mid."
+    #set fan speed to 30%
+    ipmitool -I lanplus -H $IDRACIP -U $IDRACUSER -P $IDRACPWD raw 0x30 0x30 0x02 0xff 0x1e
+else
+    echo "Setting fan speed to high."
+    #set fan speed to 80%
+    ipmitool -I lanplus -H $IDRACIP -U $IDRACUSER -P $IDRACPWD raw 0x30 0x30 0x02 0xff 0x50
+fi
+#echo $temp

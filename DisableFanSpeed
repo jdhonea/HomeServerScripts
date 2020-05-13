@@ -1,0 +1,4 @@
+IDRACIP=<iDrac IP>
+IDRACUSER=<User>
+IDRACPWD=<Password>
+ipmitool -I lanplus -H $IDRACIP -U $IDRACUSER -P $IDRACPWD raw 0x30 0x30 0x01 0x01

@@ -25,3 +25,24 @@ Automatic fan speed setting specifically for the Dell PowerEdge R230 but with a 
 
 **Useage:**  
 Set a crontab entry for every minute to invoke the script.
+
+### R720FanSpeed:
+
+**Description:**
+Automatic fan speed setting specifically for the Dell PowerEdge R720 but with a few edits will probably work for whichever PowerEdge you need.
+
+**Requires:**
+
+- IPMITool
+
+**Useage:**  
+Set a crontab entry for every minute to invoke the script.
+
+### DisableFanSpeed:
+
+**Description:**
+Removes static control of fan speed, allowing dynamic fan speed to resume.
+
+**Requires:**
+
+- IPMITool
