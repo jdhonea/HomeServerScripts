@@ -7,7 +7,7 @@ HIGHTHRESHOLD="70"
 ipmitool -I lanplus -H $IDRACIP -U $IDRACUSER -P $IDRACPWD raw 0x30 0x30 0x01 0x00 #Enables static fan control
 temp=$(ipmitool -I lanplus -H $IDRACIP -U $IDRACUSER -P $IDRACPWD sdr type temperature | grep ^Temp | awk '{print $9}')
 echo "Ambient Temperature: $temp"
-if [[ $temp > $LOWTHRESHOLD && $temp -le $MIDTHRESHOLD ]]
+if [[ $temp -le $MIDTHRESHOLD ]]
   then
     echo "Setting fan speed to low."
     #set fan speed to 25%
